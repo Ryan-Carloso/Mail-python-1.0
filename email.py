@@ -1,3 +1,5 @@
+pq n ta. funcionando?
+
 import time
 import pyautogui
 from datetime import datetime, timedelta
@@ -22,9 +24,7 @@ data_formatada = nova_data.strftime('%m/%d/%Y')
 
 # Função para enviar email
 def enviar_email(email, remente):
-    hora_formatada = hora_aleatoria()
-
-    time.sleep(10)  # Dê tempo suficiente para alternar entre as janelas
+    time.sleep(1)  # Dê tempo suficiente para alternar entre as janelas
     pyautogui.hotkey('command')  # Alternar para a próxima janela (no macOS)
     # Abrir o navegador Chrome usando PyAutoGUI
     time.sleep(20)
@@ -38,7 +38,7 @@ def enviar_email(email, remente):
     pyautogui.click(x=100, y=100)  # Mude as coordenadas de acordo com a sua tela
     gmail_url = f'https://mail.google.com/mail/u/0/?authuser={remente}&view=cm&to={email}&su=%5BBinance%5D%20Request%20to%20Reset%20Security%20Items%20From%2084.193.82.102'
     pyautogui.write(gmail_url)
-    print(f'remente: {remente}  destinario: {email}')  # Correção do print
+    print(gmail_url)
     pyautogui.press('enter')
     time.sleep(15)
     
