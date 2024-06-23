@@ -1,38 +1,16 @@
 import time
 import pyautogui
-from datetime import datetime, timedelta
 import random
 import email_list
 import remente_list
 
-# Função para gerar uma hora aleatória entre 08:00 e 18:00
-def hora_aleatoria():
-    hora = random.randint(8, 17)  # Gera uma hora entre 08 e 17
-    minuto = random.randint(0, 59)  # Gera um minuto entre 00 e 59
-    return f'{hora:02}:{minuto:02}'  # Formata a hora e minuto como HH:MM
-
-# Obtém a data atual
-data_atual = datetime.now()
-
-# Adiciona 2 dias à data atual
-nova_data = data_atual + timedelta(days=2)
-
-# Formata a nova data no formato MM/DD/YYYY
-data_formatada = nova_data.strftime('%m/%d/%Y')
-
 # Função para enviar email
 def enviar_email(email, remente):
-    hora_formatada = hora_aleatoria()
-
     time.sleep(10)  # Dê tempo suficiente para alternar entre as janelas
     pyautogui.hotkey('command')  # Alternar para a próxima janela (no macOS)
-    # Abrir o navegador Chrome usando PyAutoGUI
-    time.sleep(20)
-    # Esperar que o Google Chrome seja aberto
-    pyautogui.hotkey('command', 't')  # Seleciona a barra de endereço no macOS
-    time.sleep(3)
-    
-    
+    time.sleep(7)
+    pyautogui.hotkey('command', 't')  # Abre uma nova aba no navegador
+    time.sleep(6)
 
     # Mova o cursor para a barra de endereço e clique para entrar na URL do Gmail
     pyautogui.click(x=100, y=100)  # Mude as coordenadas de acordo com a sua tela
@@ -40,86 +18,63 @@ def enviar_email(email, remente):
     pyautogui.write(gmail_url)
     print(f'remente: {remente}  destinario: {email}')  # Correção do print
     pyautogui.press('enter')
-    time.sleep(15)
+    time.sleep(20)
     
-    # click html 
+    # Click HTML 
+    pyautogui.click(438, 767)
+    time.sleep(10)
     
-    pyautogui.click(438,767)
-    time.sleep(5)
+    # Click aplicar into HTML 
+    pyautogui.click(1174, 731)
+    time.sleep(7)
     
-    # click aplicar into html 
-        
-    pyautogui.click(1174,731)
-    time.sleep(5)
-    
-    #click schedule  send
-    
+    # Click schedule send
     pyautogui.click(145, 765)
-    time.sleep(4)
+    time.sleep(7)
     
-    
-    #click schedule  send  2.
-    
+    # Click schedule send 2
     pyautogui.click(144, 731)
-    time.sleep(4)    
-    #click choose date and time
+    time.sleep(7)
     
-    pyautogui.click(595, 561)
-    time.sleep(4)    
-        
-    pyautogui.click(809, 364)
-    time.sleep(4)    
-    #delete date
-    
-    for _ in range(20):
-        pyautogui.hotkey('backspace')
-        # Aguarda um pequeno intervalo entre cada pressionamento
-        time.sleep(0.01)  # Ajuste este valor conforme necessáriopyautogui.hotkey('backspace')    
+    # Click in tomorrow afternoon
+    num_tabs = random.randint(0, 2)
 
-            
-                    #month / day / year
-    pyautogui.write(data_formatada)
-    time.sleep(5)
-    
-    
-    pyautogui.click(790,417)
-    time.sleep(3)
-    
-    for _ in range(10):
-        pyautogui.hotkey('backspace')
-        # Aguarda um pequeno intervalo entre cada pressionamento
-        time.sleep(0.01)  # Ajuste este valor conforme necessáriopyautogui.hotkey('backspace')    
-        
-    pyautogui.write(hora_formatada)
-    
-    time.sleep(4)
-         
-    pyautogui.click(808, 633)
-    time.sleep(3)         
-    
-    
-    pyautogui.hotkey('command', 'w')  # Seleciona a barra de endereço no macOS
-    
-    
+    # Pressiona a tecla "Tab" um número aleatório de vezes
+    for _ in range(num_tabs):
+        pyautogui.press('tab')
+        time.sleep(0.2)  # Pequena pausa entre as pressões de tecla
 
-    
+    pyautogui.press('enter')
 
+    # Imprime uma mensagem diferente dependendo do valor de num_tabs
+    if num_tabs == 0:
+        print("Tomorrow morning.")
+    elif num_tabs == 1:
+        print("Tomorrow Afternoon.")
+    elif num_tabs == 2:
+        print("Monday or so.")
 
+    time.sleep(6)
+    pyautogui.hotkey('command', 'w')  # Fecha a aba atual
 
-    
-    
-    # Aqui você pode adicionar mais comandos para preencher o corpo do email e enviar
-    # ...
+# Índices iniciais de remetente e destinatário
+index_remetente = 0
+index_destinatario = 0
 
 # Loop para enviar emails a partir de todas as combinações de remetentes e destinatários
 while True:
-    # Loop através de todos os emails e remetentes
-    for email in email_list.emails:
-        for remente in remente_list.rementes:
-            enviar_email(email, remente)
-            time.sleep(10)  # Aguardar um pouco entre os envios para evitar problemas de sobrecarga
+    remetente = remente_list.rementes[index_remetente]
+    destinatario = email_list.emails[index_destinatario]
     
-    # Aguardar a entrada para continuar ou parar
-    input("Pressione Enter para continuar ou Enter novamente para parar.")
-    if input() == "":
-        break  # Sai do loop quando Enter é pressionado novamente
+    enviar_email(destinatario, remetente)
+    time.sleep(7)  # Aguardar um pouco entre os envios para evitar problemas de sobrecarga
+    
+    # Avançar para o próximo remetente e destinatário
+    index_remetente += 1
+    index_destinatario += 1
+    
+    # Reiniciar os índices se atingirem o final das listas
+    if index_remetente >= len(remente_list.rementes):
+        index_remetente = 0
+    if index_destinatario >= len(email_list.emails):
+        index_destinatario = 0
